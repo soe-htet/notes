@@ -49,19 +49,13 @@ app.get("/test", (req, res) => {
   res.status(200).json({ message: "Hello World" });
 });
 
-app.use("/auth", authRouter);
-app.use("/me", requireAuth, meRouter);
-app.use("/note", requireAuth, noteRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/me", requireAuth, meRouter);
+app.use("/api/v1/note", requireAuth, noteRouter);
 
 // app.use("/{*any}", (req, res) => {
 //   return res.status(404).json({ message: "Not Found" });
 // });
-
-app.use((err, req, res, next) => {
-  const errStatus = err.statusCode ?? 500;
-  const errMessage = err.message ?? "Internal server error";
-  return res.status(errStatus).json({ message: errMessage });
-});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -70,6 +64,12 @@ const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname, "/notes-web/dist")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/notes-web/dist/index.html"));
+});
+
+app.use((err, req, res, next) => {
+  const errStatus = err.statusCode ?? 500;
+  const errMessage = err.message ?? "Internal server error";
+  return res.status(errStatus).json({ message: errMessage });
 });
 
 import path from "path";
