@@ -111,7 +111,6 @@ export const updateProfileImage = async (req, res) => {
 };
 
 export const updateProfileImg = (req, res) => {
-  console.log(req);
   // Execute the Multer-S3 middleware
   s3UploadMiddleware(req, res, async (err) => {
     // --- 1. Handle Upload Errors (Size/Type Limits) ---
